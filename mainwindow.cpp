@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
         controlsLayout.addWidget(&slider, row++, 1);
     };
     addNumberControl(pathLenSpin, pathLenSlider, 7, 1, 100, "length: ", "");
-    addNumberControl(stepsSpin, stepsSlider, 3, 1, 1000, "", " steps");
+    addNumberControl(stepsSpin, stepsSlider, 3, 1, 100, "", " steps");
     controlsLayout.setAlignment(Qt::AlignTop);
     mainLayout.addLayout(&graphLayout);
     mainLayout.addLayout(&controlsLayout);
