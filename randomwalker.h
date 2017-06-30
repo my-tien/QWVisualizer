@@ -10,7 +10,7 @@ protected:
 
     Eigen::PermutationMatrix<Eigen::Dynamic> permutationMatrix() const;
 public:
-    RandomWalker(const int length);
+    explicit RandomWalker(const int length);
     decltype(state) step(const std::size_t n);
     virtual Eigen::VectorXd getProbabilities() const = 0;
 };

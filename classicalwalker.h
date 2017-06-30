@@ -5,7 +5,7 @@
 
 class ClassicalWalker : public RandomWalker {
 public:
-    ClassicalWalker(const int length);
+    explicit ClassicalWalker(const int length);
     virtual Eigen::VectorXd getProbabilities() const override;
 };
 

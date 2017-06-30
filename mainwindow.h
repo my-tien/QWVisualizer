@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <Q3DBars>
-#include <QBar3DSeries>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QMainWindow>
@@ -24,8 +23,7 @@ class MainWindow : public QMainWindow {
 
     void simulate();
 public:
-    MainWindow(QWidget *parent = 0);
-    ~MainWindow() {}
+    explicit MainWindow(QWidget *parent = 0);
 };
 
 #endif // MAINWINDOW_H

@@ -7,7 +7,7 @@
 
 class QuantumWalker : public RandomWalker {
 public:
-    QuantumWalker(const int length);
+    explicit QuantumWalker(const int length);
     virtual Eigen::VectorXd getProbabilities() const override;
 };
 
