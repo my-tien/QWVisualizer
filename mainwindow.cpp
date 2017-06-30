@@ -12,8 +12,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
         graphWidget->setMinimumSize(500, 500);
         graphLayout.addWidget(graphWidget);
     }
-    mainLayout.addLayout(&graphLayout);
-
     int row = 0;
     auto addNumberControl = [&row, this](QSpinBox & spin, QSlider & slider, const int value, const int min, const int max, const QString & prefix, const QString & suffix) {
         QObject::connect(&spin, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), [&slider, this](const int value) {
@@ -40,7 +38,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     addNumberControl(pathLenSpin, pathLenSlider, 7, 1, 100, "length: ", "");
     addNumberControl(stepsSpin, stepsSlider, 3, 1, 1000, "", " steps");
     controlsLayout.setAlignment(Qt::AlignTop);
-    mainLayout.addLayout(&controlsLayout);
+    graphDummyWidget.setLayout(&graphLayout);
+    controlsDummyWidget.setLayout(&controlsLayout);
+    split.addWidget(&graphDummyWidget);
+    split.addWidget(&controlsDummyWidget);
+    mainLayout.addWidget(&split);
     setCentralWidget(new QWidget(this));
     centralWidget()->setLayout(&mainLayout);
     simulate();

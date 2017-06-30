@@ -8,16 +8,20 @@
 #include <QPushButton>
 #include <QSlider>
 #include <QSpinBox>
+#include <QSplitter>
 #include <QVBoxLayout>
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
     QHBoxLayout mainLayout;
+    QSplitter split;
+    QWidget graphDummyWidget;
     QVBoxLayout graphLayout;
     QtDataVisualization::Q3DBars qGraph;
     QtDataVisualization::Q3DBars cGraph;
 
+    QWidget controlsDummyWidget;
     QGridLayout controlsLayout;
     QSpinBox pathLenSpin;
     QSlider pathLenSlider;
