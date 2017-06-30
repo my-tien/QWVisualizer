@@ -15,9 +15,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     mainLayout.addLayout(&graphLayout);
 
     pathLenSpin.setValue(7);
-    stepsSpin.setValue(2);
     pathLenSpin.setPrefix("length: ");
+    pathLenSpin.setRange(1, 100);
+    stepsSpin.setValue(2);
     stepsSpin.setSuffix(" steps");
+    stepsSpin.setRange(1, 1000);
 
     int row = 0;
     controlsLayout.setAlignment(Qt::AlignTop);
