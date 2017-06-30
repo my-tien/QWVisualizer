@@ -47,9 +47,12 @@ void MainWindow::simulate() {
 
         walker.step(stepsSpin.value());
         const auto state = walker.getProbabilities();
+        double max = 0;
         for (std::size_t i = 0; i < state.rows(); ++i) {
+            max = std::max(max, state[i]);
             *data << state[i];
         }
+        graph.valueAxis()->setRange(0, max);
         series->dataProxy()->addRow(data);
         graph.addSeries(series);
     };
