@@ -8,12 +8,15 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QSpinBox>
+#include <QVBoxLayout>
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
 
     QHBoxLayout mainLayout;
-    QtDataVisualization::Q3DBars graph;
+    QVBoxLayout graphLayout;
+    QtDataVisualization::Q3DBars qGraph;
+    QtDataVisualization::Q3DBars cGraph;
 
     QGridLayout controlsLayout;
     QSpinBox pathLenSpin;

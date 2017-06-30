@@ -1,17 +1,23 @@
 #include "mainwindow.h"
-#include "randomwalker.h"
+
+#include "classicalwalker.h"
+#include "quantumwalker.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
-    graph.setFlags(graph.flags() ^ Qt::FramelessWindowHint);
-    graph.columnAxis()->setRange(0,6);
-    graph.valueAxis()->setRange(0, 1);
+    for (auto & graph : {&cGraph, &qGraph}) {
+        graph->setFlags(graph->flags() ^ Qt::FramelessWindowHint);
+        graph->columnAxis()->setRange(0,6);
+        graph->valueAxis()->setRange(0, 1);
+        auto graphWidget = QWidget::createWindowContainer(graph, this);
+        graphWidget->setMinimumSize(500, 500);
+        graphLayout.addWidget(graphWidget);
+    }
+    mainLayout.addLayout(&graphLayout);
+
     pathLenSpin.setValue(7);
-    stepsSpin.setValue(3);
+    stepsSpin.setValue(2);
     pathLenSpin.setPrefix("length: ");
     stepsSpin.setSuffix(" steps");
-    auto graphWidget = QWidget::createWindowContainer(&graph, this);
-    graphWidget->setMinimumSize(500, 500);
-    mainLayout.addWidget(graphWidget);
 
     int row = 0;
     controlsLayout.setAlignment(Qt::AlignTop);
@@ -27,18 +33,24 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 }
 
 void MainWindow::simulate() {
-    for (auto * series : graph.seriesList()) {
-        graph.removeSeries(series);
-    }
-    graph.columnAxis()->setRange(0, pathLenSpin.value() - 1);
-    QtDataVisualization::QBar3DSeries * series = new QtDataVisualization::QBar3DSeries();
-    QtDataVisualization::QBarDataRow * data = new QtDataVisualization::QBarDataRow();
-    RandomWalker walker{pathLenSpin.value()};
-    walker.step(stepsSpin.value());
-    const auto state = walker.getState();
-    for (std::size_t i = 0; i < state.rows(); ++i) {
-        *data << state[i];
-    }
-    series->dataProxy()->addRow(data);
-    graph.addSeries(series);
+    QuantumWalker qWalker{pathLenSpin.value()};
+    ClassicalWalker cWalker{pathLenSpin.value()};
+    auto sim = [this](RandomWalker & walker, QtDataVisualization::Q3DBars & graph) {
+        for (auto * series : graph.seriesList()) {
+            graph.removeSeries(series);
+        }
+        graph.columnAxis()->setRange(0, pathLenSpin.value() - 1);
+        QtDataVisualization::QBar3DSeries * series = new QtDataVisualization::QBar3DSeries();
+        QtDataVisualization::QBarDataRow * data = new QtDataVisualization::QBarDataRow();
+
+        walker.step(stepsSpin.value());
+        const auto state = walker.getProbabilities();
+        for (std::size_t i = 0; i < state.rows(); ++i) {
+            *data << state[i];
+        }
+        series->dataProxy()->addRow(data);
+        graph.addSeries(series);
+    };
+    sim(cWalker, cGraph);
+    sim(qWalker, qGraph);
 }
