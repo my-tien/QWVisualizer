@@ -6,6 +6,7 @@
 #include <QHBoxLayout>
 #include <QMainWindow>
 #include <QPushButton>
+#include <QSlider>
 #include <QSpinBox>
 #include <QVBoxLayout>
 
@@ -19,7 +20,9 @@ class MainWindow : public QMainWindow {
 
     QGridLayout controlsLayout;
     QSpinBox pathLenSpin;
+    QSlider pathLenSlider;
     QSpinBox stepsSpin;
+    QSlider stepsSlider;
 
     void simulate();
 public:

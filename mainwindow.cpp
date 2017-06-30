@@ -14,24 +14,36 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     }
     mainLayout.addLayout(&graphLayout);
 
-    pathLenSpin.setValue(7);
-    pathLenSpin.setPrefix("length: ");
-    pathLenSpin.setRange(1, 100);
-    stepsSpin.setValue(2);
-    stepsSpin.setSuffix(" steps");
-    stepsSpin.setRange(1, 1000);
-
     int row = 0;
+    auto addNumberControl = [&row, this](QSpinBox & spin, QSlider & slider, const int value, const int min, const int max, const QString & prefix, const QString & suffix) {
+        QObject::connect(&spin, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), [&slider, this](const int value) {
+            if (value != slider.value()) {
+                slider.setValue(value);
+            }
+            simulate();
+        });
+        QObject::connect(&slider, &QSlider::valueChanged, [&spin, this](const int value) {
+            if (value != spin.value()) {
+                spin.setValue(value);
+            }
+        });
+
+        spin.setPrefix(prefix);
+        spin.setSuffix(suffix);
+        spin.setRange(min, max);
+        slider.setRange(spin.minimum(), spin.maximum());
+        spin.setValue(value);
+        slider.setOrientation(Qt::Horizontal);
+        controlsLayout.addWidget(&spin, row, 0);
+        controlsLayout.addWidget(&slider, row++, 1);
+    };
+    addNumberControl(pathLenSpin, pathLenSlider, 7, 1, 100, "length: ", "");
+    addNumberControl(stepsSpin, stepsSlider, 3, 1, 1000, "", " steps");
     controlsLayout.setAlignment(Qt::AlignTop);
-    controlsLayout.addWidget(&pathLenSpin, row++, 0);
-    controlsLayout.addWidget(&stepsSpin, row++, 0);
     mainLayout.addLayout(&controlsLayout);
     setCentralWidget(new QWidget(this));
     centralWidget()->setLayout(&mainLayout);
     simulate();
-
-    QObject::connect(&pathLenSpin, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](const int &) { simulate(); });
-    QObject::connect(&stepsSpin, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged), [this](const int &) { simulate(); });
 }
 
 void MainWindow::simulate() {
